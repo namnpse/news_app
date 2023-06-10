@@ -1,0 +1,6 @@
+package com.namnp.newsapp.domain.usecase
+
+import com.namnp.newsapp.domain.repository.NewsRepository
+
+class SaveNewsUseCase(private val newsRepository: NewsRepository) {
+}
