@@ -8,9 +8,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
     suspend fun getNewsHeadlines(country: String, page: Int): Resource<APIResponse>
+
     suspend fun saveNews(article: Article)
+
     suspend fun deleteSavedNews(article: Article)
-    suspend fun getSearchedNews(searchQuery: String): Resource<APIResponse>
+
+    suspend fun getSearchedNews(country: String, searchQuery: String, page: Int): Resource<APIResponse>
 
     //    fun getSavedNews(article: Article): LiveData<List<Article>>
     //    work for most cases, but not recommended because:

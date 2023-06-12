@@ -8,11 +8,13 @@ import com.namnp.newsapp.domain.usecase.*
 class NewsViewModelFactory(
     private val app: Application,
     private val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    private val getSearchedNewsUseCase: GetSearchedNewsUseCase,
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return NewsViewModel(
             app,
             getNewsHeadlinesUseCase,
+            getSearchedNewsUseCase
         ) as T
     }
 }

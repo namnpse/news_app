@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AbsListView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,6 +16,9 @@ import com.namnp.newsapp.data.util.Resource
 import com.namnp.newsapp.databinding.FragmentNewsBinding
 import com.namnp.newsapp.presentation.NewsViewModel
 import com.namnp.newsapp.presentation.adapter.NewsAdapter
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 class NewsFragment : Fragment() {
@@ -42,6 +46,7 @@ class NewsFragment : Fragment() {
         viewModel = (activity as MainActivity).viewModel
         initRecyclerView()
         viewNewsList()
+        setSearchView()
     }
 
     private fun viewNewsList() {
@@ -106,6 +111,66 @@ class NewsFragment : Fragment() {
     private fun hideProgressBar() {
         isLoading = false
         fragmentNewsBinding.progressBar.visibility = View.INVISIBLE
+    }
+
+    private fun setSearchView(){
+        fragmentNewsBinding.svNews.setOnQueryTextListener(
+            object : SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    viewModel.searchNews("us",p0.toString(),page)
+                    viewSearchedNews()
+                    return false
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    MainScope().launch {
+                        delay(2000)
+                        viewModel.searchNews("us", p0.toString(), page)
+                        viewSearchedNews()
+                    }
+                    return false
+                }
+
+            })
+
+        fragmentNewsBinding.svNews.setOnCloseListener {
+            initRecyclerView()
+            viewNewsList()
+            false
+        }
+    }
+
+    fun viewSearchedNews(){
+        viewModel.searchedNews.observe(viewLifecycleOwner) { response ->
+            when (response) {
+
+                is Resource.Loading -> {
+                    showProgressBar()
+                }
+
+                is Resource.Success -> {
+                    hideProgressBar()
+                    response.data?.let {
+                        Log.i("NewsFragment", "came here ${it.articles.toList().size}")
+                        newsAdapter.differ.submitList(it.articles.toList())
+                        pages = if (it.totalResults % pageSize == 0) {
+                            it.totalResults / pageSize
+                        } else {
+                            it.totalResults / pageSize + 1
+                        }
+                        isLastPage = page == pages
+                    }
+                }
+
+                is Resource.Error -> {
+                    hideProgressBar()
+                    response.message?.let {
+                        Toast.makeText(activity, "An error occurred : $it", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                }
+            }
+        }
     }
 
     private val onScrollListener = object : RecyclerView.OnScrollListener() {

@@ -16,9 +16,11 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun getSearchedNews(
+        country: String,
         searchQuery: String,
+        page: Int
     ): Resource<APIResponse> {
-        TODO()
+        return handleApiResponse(newsRemoteDataSource.getSearchedNews(country, searchQuery, page))
     }
 
     override suspend fun saveNews(article: Article) {
