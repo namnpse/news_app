@@ -1,5 +1,7 @@
-package com.namnp.newsapp.data.data_source
+package com.namnp.newsapp.data.repository
 
+import com.namnp.newsapp.data.data_source.NewsLocalDataSource
+import com.namnp.newsapp.data.data_source.NewsRemoteDataSource
 import com.namnp.newsapp.data.model.APIResponse
 import com.namnp.newsapp.data.model.Article
 import com.namnp.newsapp.data.util.Resource
@@ -9,6 +11,7 @@ import retrofit2.Response
 
 class NewsRepositoryImpl(
     private val newsRemoteDataSource: NewsRemoteDataSource,
+    private val newsLocalDataSource: NewsLocalDataSource
 ) : NewsRepository {
 
     override suspend fun getNewsHeadlines(country: String, page: Int): Resource<APIResponse> {
@@ -24,20 +27,20 @@ class NewsRepositoryImpl(
     }
 
     override suspend fun saveNews(article: Article) {
-        TODO()
+        newsLocalDataSource.saveArticleToDB(article)
     }
 
     override suspend fun deleteSavedNews(article: Article) {
-        TODO()
+        newsLocalDataSource.deleteArticlesFromDB(article)
     }
 
     override fun getSavedNews(): Flow<List<Article>> {
-        TODO()
+        return newsLocalDataSource.getSavedArticles()
     }
 
     private fun handleApiResponse(response: Response<APIResponse>): Resource<APIResponse> {
         if (response.isSuccessful) {
-            response.body()?.let { result ->
+            response.body()?. let { result ->
                 return Resource.Success(result)
             }
         }

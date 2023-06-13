@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.snackbar.Snackbar
 import com.namnp.newsapp.databinding.FragmentInfoBinding
 import com.namnp.newsapp.presentation.NewsViewModel
 
@@ -35,6 +36,10 @@ class InfoFragment : Fragment() {
             if (article.url != null) {
                 loadUrl(article.url)
             }
+        }
+        fragmentInfoBinding.fabSave.setOnClickListener {
+            viewModel.saveArticle(article)
+            Snackbar.make(view,"Saved Successfully!", Snackbar.LENGTH_LONG).show()
         }
     }
 }
