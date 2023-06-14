@@ -4,6 +4,7 @@ package com.namnp.newsapp.data.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.namnp.newsapp.domain.entity.ArticleEntity
 import java.io.Serializable
 
 @Entity(
@@ -29,3 +30,17 @@ data class Article(
     @SerializedName("urlToImage")
     val urlToImage: String?
 ):Serializable
+
+fun Article.toEntity(): ArticleEntity {
+    return ArticleEntity(
+        id = id,
+        author = author,
+        content = content,
+        description = description,
+        publishedAt = publishedAt,
+        source = source?.toEntity(),
+        title = title,
+        url = url,
+        urlToImage = urlToImage,
+    )
+}
