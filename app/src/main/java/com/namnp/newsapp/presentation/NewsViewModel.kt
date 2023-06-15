@@ -7,8 +7,8 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import androidx.lifecycle.*
 import com.namnp.newsapp.data.model.APIResponse
-import com.namnp.newsapp.data.model.Article
 import com.namnp.newsapp.data.util.Resource
+import com.namnp.newsapp.domain.entity.ArticleEntity
 import com.namnp.newsapp.domain.usecase.DeleteSavedNewsUseCase
 import com.namnp.newsapp.domain.usecase.GetNewsHeadlinesUseCase
 import com.namnp.newsapp.domain.usecase.GetSavedNewsUseCase
@@ -70,7 +70,7 @@ class NewsViewModel(
     }
 
     //local data
-    fun saveArticle(article: Article) = viewModelScope.launch {
+    fun saveArticle(article: ArticleEntity) = viewModelScope.launch {
         saveNewsUseCase.execute(article)
     }
 
@@ -80,7 +80,7 @@ class NewsViewModel(
         }
     }
 
-    fun deleteArticle(article: Article) = viewModelScope.launch {
+    fun deleteArticle(article: ArticleEntity) = viewModelScope.launch {
         deleteSavedNewsUseCase.execute(article)
     }
 

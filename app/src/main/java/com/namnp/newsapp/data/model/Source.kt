@@ -7,14 +7,14 @@ import com.namnp.newsapp.domain.entity.SourceEntity
 
 data class Source(
     @SerializedName("id")
-    val id: String,
+    val id: String?,
     @SerializedName("name")
     val name: String
 )
 
 fun Source.toEntity(): SourceEntity {
     return SourceEntity(
-        id = id,
+        id = id ?: "",
         name = name,
     )
 }

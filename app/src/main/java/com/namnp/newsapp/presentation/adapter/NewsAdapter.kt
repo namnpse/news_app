@@ -2,22 +2,21 @@ package com.namnp.newsapp.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Adapter
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.namnp.newsapp.data.model.Article
 import com.namnp.newsapp.databinding.NewsListItemBinding
+import com.namnp.newsapp.domain.entity.ArticleEntity
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
 
-    private val diffUtilCallback = object : DiffUtil.ItemCallback<Article>() {
-        override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
+    private val diffUtilCallback = object : DiffUtil.ItemCallback<ArticleEntity>() {
+        override fun areItemsTheSame(oldItem: ArticleEntity, newItem: ArticleEntity): Boolean {
             return oldItem.url == newItem.url
         }
 
-        override fun areContentsTheSame(oldItem: Article, newItem: Article): Boolean {
+        override fun areContentsTheSame(oldItem: ArticleEntity, newItem: ArticleEntity): Boolean {
             return oldItem == newItem
         }
     }
@@ -43,7 +42,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         private val binding: NewsListItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(article: Article) {
+        fun bind(article: ArticleEntity) {
             binding.tvTitle.text = article.title
             binding.tvSource.text = article.source?.name ?: ""
             binding.tvDescription.text = article.description
@@ -60,9 +59,9 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.NewsViewHolder>() {
         }
     }
 
-    private var onItemClickListener: ((Article) -> Unit)? = null
+    private var onItemClickListener: ((ArticleEntity) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Article) -> Unit) {
+    fun setOnItemClickListener(listener: (ArticleEntity) -> Unit) {
         onItemClickListener = listener
     }
 }

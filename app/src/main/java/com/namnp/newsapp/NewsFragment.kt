@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.namnp.newsapp.data.model.toEntity
 import com.namnp.newsapp.data.util.Resource
 import com.namnp.newsapp.databinding.FragmentNewsBinding
 import com.namnp.newsapp.presentation.NewsViewModel
@@ -57,7 +58,7 @@ class NewsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let {
                         Log.i("NewsFragment", "came here ${it.articles.toList().size}")
-                        newsAdapter.differ.submitList(it.articles.toList())
+                        newsAdapter.differ.submitList(it.articles.toList().map { article -> article.toEntity() })
                         pages = if (it.totalResults % pageSize == 0) {
                             it.totalResults / pageSize
                         } else {
@@ -152,7 +153,7 @@ class NewsFragment : Fragment() {
                     hideProgressBar()
                     response.data?.let {
                         Log.i("NewsFragment", "came here ${it.articles.toList().size}")
-                        newsAdapter.differ.submitList(it.articles.toList())
+                        newsAdapter.differ.submitList(it.articles.toList().map { article -> article.toEntity() })
                         pages = if (it.totalResults % pageSize == 0) {
                             it.totalResults / pageSize
                         } else {
